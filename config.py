@@ -1,3 +1,3 @@
 settings = {
-    'collab_file': 'ratings.csv'
+    'collab_file': 'ratings_small.csv'
 }
