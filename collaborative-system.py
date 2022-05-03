@@ -13,7 +13,7 @@ print("# {}".format(ratings_df.head()))
 lst = np.array([[0.0]*ratings_df['movieId'].max()]*len(ratings_df['userId'].unique()))
 
 for x in range(ratings_df.shape[0]):
-    lst[list(ratings_df['userId'])[x]-1][list(ratings_df['movieId'])[x]-1] = list(ratings_df['rating'])[x]
+    lst[tuple(ratings_df['userId'])[x]-1][tuple(ratings_df['movieId'])[x]-1] = tuple(ratings_df['rating'])[x]
 
 print(*lst, sep='\n')
 
