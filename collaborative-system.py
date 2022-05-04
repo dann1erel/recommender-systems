@@ -5,9 +5,16 @@ from config import settings
 ratings_df = pd.read_csv(settings['collab_file'])
 
 
-print('Unique users count: {}'.format(len(ratings_df['userId'].unique())))
-print('Unique movies count: {}'.format(len(ratings_df['movieId'].unique())))
-print('DataFrame shape: {}'.format(ratings_df.shape))
+
+n = 100000
+ratings_df_sample = ratings_df[:n]
+
+n_users = len(ratings_df_sample['userId'].unique())
+n_movies = len(ratings_df_sample['movieId'].unique())
+
+print('Unique users count: {}'.format(len(ratings_df_sample['userId'].unique())))
+print('Unique movies count: {}'.format(len(ratings_df_sample['movieId'].unique())))
+print('DataFrame shape: {}'.format(ratings_df_sample.shape))
 print("# {}".format(ratings_df.head()))
 
 lst = np.array([[0.0]*ratings_df['movieId'].max()]*len(ratings_df['userId'].unique()))
@@ -18,3 +25,7 @@ for x in range(ratings_df.shape[0]):
 print(*lst, sep='\n')
 
 ratings_df.head()
+
+def cos_similarity(vecA, vecB):
+    result = (np.dot(vecA, vecB))/(np.linalg.norm(vecA) * np.linalg.norm(vecB))  # dot - scalar product, norm - vector length???
+    return result
