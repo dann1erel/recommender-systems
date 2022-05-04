@@ -4,9 +4,9 @@ from config import settings
 
 ratings_df = pd.read_csv(settings['collab_file'])
 
-n = 1000
+n = 5000
 ratings_df_sample = ratings_df[:n]
-user_ratings = [0.0, 4.0, 3.0, 5.0, 1.0]
+user_ratings = [5.0, 0.0, 3.0, 0.0, 3.0]
 
 n_users = len(ratings_df_sample['userId'].unique())
 n_movies = len(ratings_df_sample['movieId'].unique())
@@ -36,6 +36,27 @@ def cos_similarity(vec_a, vec_b):
 lst_sim = np.array([0.0]*len(ratings_df_sample['userId'].unique()))
 
 for i in range(len(ratings_df_sample['userId'].unique())):
-            lst_sim[i] = cos_similarity(user_ratings, np.array(lst[i]))
+    lst_sim[i] = cos_similarity(user_ratings, np.array(lst[i]))
 
 print("\nSimilarity matrix:\n", lst_sim)
+
+lst_sim_enum = tuple(sorted(enumerate(lst_sim), key=lambda el: el[1], reverse=True))
+
+print(lst_sim_enum)
+
+sim_border = 0.6
+
+films_to_rec = [i for i in range(len(user_ratings)) if user_ratings[i] == 0]
+
+for i in films_to_rec:
+    ratings_sum = 0
+    vectors_amount = 0
+    vect_check = 0
+    for ind, dist in lst_sim_enum:
+        if dist > sim_border:
+            vect_check = lst[ind]
+            ratings_sum += vect_check[i]
+            vectors_amount += 1 if vect_check[i] != 0 else 0
+    user_ratings[i] = ratings_sum / vectors_amount if vect_check[i] != 0 else 0.0
+
+print(user_ratings)
