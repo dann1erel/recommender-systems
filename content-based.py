@@ -10,11 +10,12 @@ words = {}
 for x in text_df_sample["blurb"]:
     text = ''.join(i if (i.isalnum()) or (i == " ") else " " for i in x).split()
     for w in text:
-        w = w.lower()
-        if w in words:
-            words[w] += 1
-        else:
-            words.update({w: 1})
+        if len(w) > 1:
+            w = w.lower()
+            if w in words:
+                words[w] += 1
+            else:
+                words.update({w: 1})
 
 for x in sw(language='en'):
     words.pop(x, None)
