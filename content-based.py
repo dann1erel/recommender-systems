@@ -1,26 +1,22 @@
 import numpy as np
 import pandas as pd
 from config import settings
-import re
-from stop_words import get_stop_words
+from stop_words import get_stop_words as sw
 
 text_df = pd.read_csv(settings['content_file'])
 text_df_sample = text_df[:10000]
 
-print(*get_stop_words(language="en"), sep='\n')
-
-splitters = [';', ',', ' ', ';', ':']
-
-words = set()
+words = {}
 for x in text_df_sample["blurb"]:
-    text = ''.join(i if (i.isalnum()) or (i == " ") else " " for i in x)
-    text = text.split()
+    text = ''.join(i if (i.isalnum()) or (i == " ") else " " for i in x).split()
     for w in text:
-        # w = w.replace(",", '').replace()
-        words.add(w)
+        w = w.lower()
+        if w in words:
+            words[w] += 1
+        else:
+            words.update({w: 1})
 
-for x in get_stop_words(language="en"):
-    words.discard(x)
-words = sorted(words)
+for x in sw(language='en'):
+    words.pop(x, None)
 
-print(words)
+print(sorted(words.items(), key=lambda el: el[1], reverse=True))
