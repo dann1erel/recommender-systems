@@ -26,12 +26,10 @@ print("\nRatings:")
 print(*lst, sep='\n')
 print("\nUser ratings: ", user_ratings)
 
-
 def cos_similarity(vec_a, vec_b):
     # dot - scalar product, norm - vector length???
     result = (np.dot(vec_a, vec_b))/(np.linalg.norm(vec_a) * np.linalg.norm(vec_b))
     return result
-
 
 lst_sim = np.array([0.0]*len(ratings_df_sample['userId'].unique()))
 

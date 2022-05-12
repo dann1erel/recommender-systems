@@ -1,1 +1,1 @@
-print("Hello! I am content based filtration.")
+print("Hello! I am content-based filtration.")
