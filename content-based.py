@@ -1,8 +1,8 @@
 import numpy as np
 import pandas as pd
 from config import settings
+from textblob import Word
 from stop_words import get_stop_words as sw
-from nltk.stem import WordNetLemmatizer
 
 text_df = pd.read_csv(settings['content_file'])
 text_df_sample = text_df[:10000]
@@ -10,16 +10,13 @@ text_df_sample = text_df[:10000]
 texts = list(text_df_sample['blurb'])
 states = list(text_df_sample['state'])
 
-lemma = WordNetLemmatizer()
-lemmatize = lemma.lemmatize
-
 words = {}
 for ind in range(text_df_sample.shape[0]):
     sent = texts[ind]
     text = ''.join(s if s.isalnum() else " " for s in sent).split()
     for w in text:
         if not w.isdecimal() and len(w) > 1:
-            w = lemmatize(w.lower())
+            w = Word(w.lower())
             state = 1 if states[ind] == 'successful' else 0
             if w in words:
                 words[w][0] += 1
