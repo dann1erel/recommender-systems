@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
-from config import settings
 from textblob import Word
+from config import settings
 from stop_words import get_stop_words as sw
 
 text_df = pd.read_csv(settings['content_file'])
@@ -15,7 +15,7 @@ for ind in range(text_df_sample.shape[0]):
     sent = texts[ind]
     text = ''.join(s if s.isalnum() else " " for s in sent).split()
     for w in text:
-        if not w.isdecimal() and len(w) > 1:
+        if len(w) > 1 and not w.isdecimal():
             w = Word(w.lower()).lemmatize()
             state = 1 if states[ind] == 'successful' else 0
             if w in words:
