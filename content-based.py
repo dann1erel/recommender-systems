@@ -16,7 +16,7 @@ for ind in range(text_df_sample.shape[0]):
     text = ''.join(s if s.isalnum() else " " for s in sent).split()
     for w in text:
         if not w.isdecimal() and len(w) > 1:
-            w = Word(w.lower())
+            w = Word(w.lower()).lemmatize()
             state = 1 if states[ind] == 'successful' else 0
             if w in words:
                 words[w][0] += 1
