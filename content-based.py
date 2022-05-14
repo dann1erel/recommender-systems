@@ -1,8 +1,10 @@
 import numpy as np
 import pandas as pd
-from textblob import Word
 from config import settings
+from textblob import Word
 from stop_words import get_stop_words as sw
+import spacy
+nlp = spacy.load('en')
 
 text_df = pd.read_csv(settings['content_file'])
 text_df_sample = text_df[:10000]
@@ -13,16 +15,17 @@ states = list(text_df_sample['state'])
 words = {}
 for ind in range(text_df_sample.shape[0]):
     sent = texts[ind]
-    text = ''.join(s if s.isalnum() else " " for s in sent).split()
+    text = ''.join(s if s.isalnum() else " " for s in sent)
+    text = nlp(text)
     for w in text:
-        if len(w) > 1 and not w.isdecimal():
-            w = Word(w.lower()).lemmatize()
-            state = 1 if states[ind] == 'successful' else 0
-            if w in words:
-                words[w][0] += 1
-                words[w][1] += state
-            else:
-                words.update({w: [1, state]})
+        # if (not w.isdecimal()) and (len(w) > 1):
+        w_lemmatized = w.lemma_
+        state = 1 if states[ind] == 'successful' else 0
+        if w_lemmatized in words:
+            words[w_lemmatized][0] += 1
+            words[w_lemmatized][1] += state
+        else:
+            words.update({w_lemmatized: [1, state]})
 
 for x in sw(language='en'):
     words.pop(x, None)
