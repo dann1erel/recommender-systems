@@ -68,5 +68,18 @@ for words in texts_lemma:
         texts_tf_idf[i][word] = text_tf_idf[word]
     i += 1
 
-print(texts_tf_idf)
+# print(texts_tf_idf)
 
+vectors = []
+for i in texts_tf_idf:
+    sentence = texts_tf_idf[i]
+    vector = np.array([sentence[i] for i in sentence])
+    vectors.append(vector)
+user_vector = vectors[-1]
+vectors.pop(-1)
+
+cosines = []
+for vec in vectors:
+    cosines.append(cos_similarity(vec, user_vector))
+cosines_enum = tuple(sorted(enumerate(cosines), key=lambda el: el[1], reverse=True))
+print(cosines_enum)
