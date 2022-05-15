@@ -6,14 +6,14 @@ import spacy
 nlp = spacy.load("en_core_web_sm", disable=['parser', 'ner'])
 
 text_df = pd.read_csv(settings['content_file'])
-n = 1000
+n = 100
 text_df_sample = text_df[:n]
 
 texts = list(text_df_sample['blurb'])
 states = list(text_df_sample['state'])
 
-texts_tf_idf = {}
 texts_lemma = []
+all_words = {}
 for ind in range(text_df_sample.shape[0]):
     words = {}
     sent = texts[ind]
@@ -26,16 +26,24 @@ for ind in range(text_df_sample.shape[0]):
                 words[w_lemma] += 1
             else:
                 words.update({w_lemma: 1})
+            if w_lemma not in all_words:
+                all_words.update({w_lemma: 0})
     for x in sw(language='en'):
         words.pop(x, None)
+        all_words.pop(x, None)
     texts_lemma.append(words)
 
-i = 1
+
+texts_tf_idf = {}
+for i in range(n):
+    all_words_c = all_words.copy()
+    texts_tf_idf.update({i: all_words_c})
+i = 0
 for words in texts_lemma:
     words_unique = len(words)
     text_tf_idf = {}
-    texts_with_word = 0
     for word in words:
+        texts_with_word = 0
         tf = words[word] / words_unique
         for text_check in texts_lemma:
             if word in text_check:
@@ -43,7 +51,8 @@ for words in texts_lemma:
         idf = np.log10(n/texts_with_word)
         tf_idf = tf * idf
         text_tf_idf.update({word: tf_idf})
-    texts_tf_idf.update({i: text_tf_idf})
+    for word in text_tf_idf:
+        texts_tf_idf[i][word] = text_tf_idf[word]
     i += 1
 
 
