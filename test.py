@@ -6,7 +6,8 @@ import spacy
 nlp = spacy.load("en_core_web_sm", disable=['parser', 'ner'])
 
 text_df = pd.read_csv(settings['content_file'])
-text_df_sample = text_df[:100]
+n = 100
+text_df_sample = text_df[:n]
 
 texts = list(text_df_sample['blurb'])
 states = list(text_df_sample['state'])
@@ -19,7 +20,7 @@ for ind in range(text_df_sample.shape[0]):
     text = ''.join(s.lower() if s.isalnum() else " " for s in sent)
     text = nlp(text)
     for w in text:
-        if (not w.lemma_.isdecimal()) and (len(w) > 1):    #🤯🥴🤢
+        if (not w.lemma_.isdecimal()) and (len(w) > 1):    # 🤯🥴🤢
             w_lemmatized = w.lemma_
             if w_lemmatized in words:
                 words[w_lemmatized] += 1
@@ -28,14 +29,22 @@ for ind in range(text_df_sample.shape[0]):
     for x in sw(language='en'):
         words.pop(x, None)
     texts_lematized.append(words)
+i = 1
 for words in texts_lematized:
     words_unique = len(words)
+    text_tf_idf = []
+    texts_with_word = 0
     for word in words:
+        tf = words[word] / words_unique
         for text_check in texts_lematized:
-            if word in
-            tf = words[word] / words_unique
+            if word in text_check:
+                texts_with_word += 1
+        idf = np.log10(n/texts_with_word)
+        tf_idf = tf * idf
+        text_tf_idf.append(tf_idf)
+    texts_tf_idf.update({i: text_tf_idf})
+    i += 1
 
 
-
-
-print(sorted(words.items(), key=lambda el: el[1][0], reverse=True))
+print(texts_tf_idf)
+# print(sorted(words.items(), key=lambda el: el[1][0], reverse=True))
