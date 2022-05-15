@@ -55,5 +55,10 @@ for words in texts_lemma:
         texts_tf_idf[i][word] = text_tf_idf[word]
     i += 1
 
+def cos_similarity(vec_a, vec_b):
+    # dot - scalar product, norm - vector length???
+    result = (np.dot(vec_a, vec_b))/(np.linalg.norm(vec_a) * np.linalg.norm(vec_b))
+    return result
+
 
 print(texts_tf_idf)
