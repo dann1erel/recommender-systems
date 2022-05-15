@@ -38,9 +38,9 @@ def transform_text(sent):
 
 
 def cos_similarity(vec_a, vec_b):
-    # dot - scalar product, norm - vector length???
-    result = (np.dot(vec_a, vec_b))/(np.linalg.norm(vec_a) * np.linalg.norm(vec_b))
-    return result
+    # dot - scalar product, norm - vector length
+    res = (np.dot(vec_a, vec_b))/(np.linalg.norm(vec_a) * np.linalg.norm(vec_b))
+    return res
 
 
 for ind in range(text_df_sample.shape[0]):
@@ -82,7 +82,6 @@ cosines = []
 for vec in vectors:
     cosines.append(cos_similarity(vec, user_vector))
 cosines_enum = tuple(sorted(enumerate(cosines), key=lambda el: el[1], reverse=True))
-print(*cosines_enum)
 
 sim_border = 0.15
 
@@ -93,10 +92,8 @@ while cosines_enum[i][1] >= sim_border:
         result += 1 * cosines_enum[i][1]
     else:
         result -= 1 * cosines_enum[i][1]
-    print(result)
     i = i + 1
 
-print(result)
 if result < 0:
     print("This project most likely will fail")
 elif result > 0.2:
