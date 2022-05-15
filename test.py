@@ -6,7 +6,7 @@ import spacy
 nlp = spacy.load("en_core_web_sm", disable=['parser', 'ner'])
 
 text_df = pd.read_csv(settings['content_file'])
-n = 100
+n = 1000
 text_df_sample = text_df[:n]
 
 texts = list(text_df_sample['blurb'])
@@ -32,7 +32,7 @@ for ind in range(text_df_sample.shape[0]):
 i = 1
 for words in texts_lematized:
     words_unique = len(words)
-    text_tf_idf = []
+    text_tf_idf = {}
     texts_with_word = 0
     for word in words:
         tf = words[word] / words_unique
@@ -41,7 +41,7 @@ for words in texts_lematized:
                 texts_with_word += 1
         idf = np.log10(n/texts_with_word)
         tf_idf = tf * idf
-        text_tf_idf.append(tf_idf)
+        text_tf_idf.update({word: tf_idf})
     texts_tf_idf.update({i: text_tf_idf})
     i += 1
 
