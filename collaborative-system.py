@@ -6,7 +6,7 @@ from config import settings
 ratings_df = pd.read_csv(settings['collab_file'])
 
 # Setting the size of sample
-n = 5000
+n = 15
 ratings_df_sample = ratings_df[:n]
 
 # Setting user's rating

@@ -11,10 +11,10 @@ nlp = spacy.load("en_core_web_sm", disable=['parser', 'ner'])
 text_df = pd.read_csv(settings['content_file'])
 
 # Setting the size of sample
-num_of_lines = 3000
+num_of_lines = 4000
 text_df_sample = text_df[:num_of_lines]
 
-# Saving columns in list for better perfomance
+# Saving columns in list for better performance
 texts = list(text_df_sample['blurb'])
 states = list(text_df_sample['state'])
 
@@ -139,7 +139,7 @@ while cosines_enum[i][1] >= sim_border:
 # Cos similarity compare, out results
 if result < 0:
     print("This project most likely will fail")
-elif result > 0.2:
+elif result > 0.15:
     print("This project most likely will be successful")
 else:
     print("Predictions cannot be made")
