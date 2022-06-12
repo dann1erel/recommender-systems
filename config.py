@@ -1,4 +1,4 @@
 settings = {
-    'collab_file': 'ratings_small.csv',
-    'content_file': 'df_text_eng_new.csv'
+    'collab_file': 'testing_data/ratings_small.csv',
+    'content_file': 'testing_data/df_text_eng_new.csv'
 }
