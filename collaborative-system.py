@@ -66,16 +66,16 @@ films_to_rec = [i for i in range(len(user_ratings)) if user_ratings[i] == 0]
 # User rating compute
 for i in films_to_rec:
     ratings_sum = 0
-    vectors_amount = 0
     vect_check = 0
+    dist_sum = 0
 
     for ind, dist in lst_sim_enum:
         if dist > sim_border:
             vect_check = lst[ind]
-            ratings_sum += vect_check[i]
-            vectors_amount += 1 if vect_check[i] != 0 else 0
+            ratings_sum += vect_check[i] * dist
+            dist_sum += abs(dist)
 
-    user_ratings[i] = ratings_sum / vectors_amount if vect_check[i] != 0 else 0.0
+    user_ratings[i] = float(round(ratings_sum / dist_sum)) if vect_check[i] != 0 else 0.0
 
 # Output user ratings
 print(user_ratings)
